@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tilecal Widgets</title>
+  <meta name="theme-color" content="#14161c" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&family=Nunito:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"></span>
+      <span>Tilecal</span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="home" role="tab">Home screen</button>
+      <button class="tab" data-view="gallery" role="tab">Gallery</button>
+      <button class="tab" data-view="events" role="tab">Events</button>
+      <button class="tab" data-view="settings" role="tab">Settings</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Home screen -->
+    <section class="view active" id="view-home">
+      <div class="view-head">
+        <div>
+          <h1>Your widgets</h1>
+          <p class="muted">Click a widget to customize it. Drag to reorder.</p>
+        </div>
+        <button class="btn primary" data-goto="gallery">+ Add widget</button>
+      </div>
+      <div class="wallpaper" id="wallpaper">
+        <div class="board" id="board"></div>
+        <div class="empty" id="board-empty" hidden>
+          <p>No widgets yet.</p>
+          <button class="btn primary" data-goto="gallery">Browse the gallery</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="view" id="view-gallery">
+      <div class="view-head">
+        <div>
+          <h1>Gallery</h1>
+          <p class="muted">Pick a style and a size, then add it to your home screen.</p>
+        </div>
+        <div class="seg" id="gallery-size">
+          <button data-size="s">Small</button>
+          <button data-size="m" class="on">Medium</button>
+          <button data-size="l">Large</button>
+        </div>
+      </div>
+      <div class="gallery" id="gallery"></div>
+    </section>
+
+    <!-- Events -->
+    <section class="view" id="view-events">
+      <div class="view-head">
+        <div>
+          <h1>Events</h1>
+          <p class="muted">Events show up on your month, week, today and agenda widgets.</p>
+        </div>
+        <label class="btn">
+          Import .ics
+          <input type="file" id="ics-input" accept=".ics,text/calendar" hidden />
+        </label>
+      </div>
+      <div class="events-layout">
+        <div class="card">
+          <div class="cal-head">
+            <button class="icon-btn" id="cal-prev" aria-label="Previous month">‹</button>
+            <h2 id="cal-title"></h2>
+            <button class="icon-btn" id="cal-next" aria-label="Next month">›</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+        <div class="card">
+          <h2 id="day-title">Add event</h2>
+          <form id="event-form" class="form">
+            <label>Title <input name="title" required maxlength="80" placeholder="Dinner with Sam" /></label>
+            <div class="row">
+              <label>Date <input name="date" type="date" required /></label>
+              <label>Time <input name="time" type="time" /></label>
+            </div>
+            <label>Color
+              <div class="swatches" id="event-colors"></div>
+            </label>
+            <button class="btn primary" type="submit">Add event</button>
+          </form>
+          <h3>Upcoming</h3>
+          <ul class="event-list" id="event-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section class="view" id="view-settings">
+      <div class="view-head"><h1>Settings</h1></div>
+      <div class="card form narrow">
+        <label>Week starts on
+          <select id="set-weekstart">
+            <option value="0">Sunday</option>
+            <option value="1">Monday</option>
+          </select>
+        </label>
+        <label>Wallpaper
+          <div class="swatches" id="set-wallpaper"></div>
+        </label>
+        <label class="check"><input type="checkbox" id="set-weeknums" /> Show week numbers on month widgets</label>
+        <label class="check"><input type="checkbox" id="set-24h" /> Use 24-hour time</label>
+        <div class="row">
+          <button class="btn" id="export-btn" type="button">Export backup</button>
+          <label class="btn">Restore backup<input type="file" id="import-btn" accept="application/json" hidden /></label>
+        </div>
+        <button class="btn danger" id="reset-btn" type="button">Reset everything</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Editor sheet -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="sheet" id="sheet" aria-hidden="true">
+    <div class="sheet-head">
+      <h2>Edit widget</h2>
+      <button class="icon-btn" id="sheet-close" aria-label="Close">✕</button>
+    </div>
+    <div class="sheet-preview" id="sheet-preview"></div>
+    <div class="form" id="sheet-form">
+      <label>Size
+        <div class="seg" id="ed-size">
+          <button data-size="s">Small</button>
+          <button data-size="m">Medium</button>
+          <button data-size="l">Large</button>
+        </div>
+      </label>
+      <label>Theme
+        <div class="themes" id="ed-themes"></div>
+      </label>
+      <div class="row">
+        <label>Background <input type="color" id="ed-bg" /></label>
+        <label>Text <input type="color" id="ed-fg" /></label>
+        <label>Accent <input type="color" id="ed-accent" /></label>
+      </div>
+      <label>Font
+        <select id="ed-font">
+          <option value="inter">Clean (Inter)</option>
+          <option value="serif">Editorial (Serif)</option>
+          <option value="rounded">Friendly (Rounded)</option>
+          <option value="mono">Typewriter (Mono)</option>
+        </select>
+      </label>
+      <label>Corner radius <input type="range" id="ed-radius" min="0" max="40" /></label>
+      <div id="ed-countdown" class="form" hidden>
+        <label>Countdown title <input id="ed-cd-title" maxlength="30" /></label>
+        <label>Countdown date <input type="date" id="ed-cd-date" /></label>
+      </div>
+      <div class="row">
+        <button class="btn" id="ed-dup" type="button">Duplicate</button>
+        <button class="btn danger" id="ed-del" type="button">Remove</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

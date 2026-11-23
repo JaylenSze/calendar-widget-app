@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gridcal</string>
+    <string name="widget_name">Gridcal calendar</string>
+    <string name="widget_desc">Weeks or a month of your calendar, with events</string>
+</resources>

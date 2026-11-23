@@ -1,0 +1,11 @@
+.claude/
+.gradle/
+.kotlin/
+build/
+local.properties
+*.apk
+*.keystore
+*.jks
+.idea/
+*.iml
+.DS_Store

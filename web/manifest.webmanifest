@@ -1,0 +1,8 @@
+{
+  "name": "Tilecal Widgets",
+  "short_name": "Tilecal",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f4f2ee",
+  "theme_color": "#14161c"
+}
